@@ -1,0 +1,29 @@
+#JSGF V1.0;
+grammar mediacontrol;
+/**
+ * Control media devices in my living room
+ *
+ * @example please turn on amplifier
+ * @example please power off the projector
+ */
+public <reserveRoom> = <startPolite> <command> <endPolite>;
+
+/**
+ * Commands
+ *
+ * @example schedule
+ * @example reserve
+ */
+<command> = (<action> <object>) | quit ;
+<action> = ((turn | power) ( on | off )) | ((arrow | menu) ( up | down | left | right ) [<number> [times | time] ]) | enter | escape | home;
+<object> = [the] (projector | amplifier | blue ray);
+<startPolite> = (please | kindly | could you | computer)*;
+<endPolite> = [please | thanks | thank you];
+
+/**
+ * An integer referring to number of presses.
+ *
+ * @example one
+ * @example seven
+ */
+<number> = ( one | two | three | four | five | six | seven | eight | nine | ten );
