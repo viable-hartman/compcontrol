@@ -14,7 +14,7 @@ public <reserveRoom> = <startPolite> <command> <endPolite>;
  * @example schedule
  * @example reserve
  */
-<command> = (<action> <object>) | quit ;
+<command> = (<action> <object>) | quit | snore | wake up;
 <action> = ((turn | power) ( on | off )) | ((arrow | menu) ( up | down | left | right ) [<number> [times | time] ]) | enter | escape | home;
 <object> = [the] (projector | amplifier | blue ray);
 <startPolite> = (please | kindly | could you | computer)*;

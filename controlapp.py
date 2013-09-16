@@ -32,6 +32,7 @@ def main():
         exit(0)
 
     cDict = {}
+    snoremode = False
     logger.info("Attempting to access %s" % deviceName)
     with serial.Serial(deviceName) as serialDevice:
         toy = TSToy(serialDevice)
@@ -66,19 +67,26 @@ def main():
                 setc = setl - setf
                 # Lookup matching command and send to standard out
                 vcmd = " ".join(list(setc))
-                if vcmd == 'quit':
-                    break
-                try:
-                    # Get serial command from verbal command key
-                    for cmd in dictact[vcmd].split("&"):
-                        cmdlist = cmd.split(":")
-                        while (cmdlist[2] > 0):
-                            t = cDict[cmdlist[0]]
-                            logger.debug("Calling Thread: %s with Command: %s" % (cmdlist[0], cmdlist[1]))
-                            t.addCmd(cmdlist[1])
-                            cmdlist[2] = cmdlist[2] - 1
-                except:
-                    pass
+                if vcmd == 'snore':
+                    logger.info("~~~ SNORING ~~~")
+                    snoremode = True
+                elif vcmd == 'wake up' and snoremode:
+                    logger.info("~~~ Resuming normal operations ~~~")
+                    snoremode = False
+                if not snoremode:
+                    if vcmd == 'quit':
+                        break
+                    try:
+                        # Get serial command from verbal command key
+                        for cmd in dictact[vcmd].split("&"):
+                            cmdlist = cmd.split(":")
+                            while (cmdlist[2] > 0):
+                                t = cDict[cmdlist[0]]
+                                logger.debug("Calling Thread: %s with Command: %s" % (cmdlist[0], cmdlist[1]))
+                                t.addCmd(cmdlist[1])
+                                cmdlist[2] = cmdlist[2] - 1
+                    except:
+                        pass
         logger.info("~~~~~~ Good Bye %s ~~~~~~", os.environ['USER'])
 
         # End all Threads.

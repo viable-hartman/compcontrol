@@ -20,6 +20,9 @@ json_data = open('./json/actions.json')
 data = json.load(json_data)
 dictact = data['actions']
 json_data.close()
+
+# Snoring or not?
+snoremode = False
 #pprint.pprint(dictact)
 print("~~~~~~ Welcome %s ~~~~~~") % (os.environ['USER'])
 while True:
@@ -32,10 +35,17 @@ while True:
         setc = setl - setf
         # Lookup matching command and send to standard out
         cmd = " ".join(list(setc))
-        if cmd == 'quit':
-            break
-        try:
-            print(dictact[cmd])
-        except:
-            pass
+        if cmd == 'snore':
+            print("Now in snore mode.  Will listen, but won't look up commands.")
+            snoremode = True
+        elif cmd == 'wake up' and snoremode:
+            print("Resuming normal operations.")
+            snoremode = False
+        if not snoremode:
+            if cmd == 'quit':
+                break
+            try:
+                    print(dictact[cmd])
+            except:
+                pass
 print("~~~~~~ Good Bye ~~~~~~")
